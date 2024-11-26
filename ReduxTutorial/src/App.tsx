@@ -1,10 +1,24 @@
-import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Navbar } from "./app/NavBar";
+import PostsList from "./features/posts/PostsList";
 
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <Router>
+      <Navbar />
+      <div className="bg-teal-100">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <PostsList />
+              </>
+            }
+          ></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
