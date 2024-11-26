@@ -44,11 +44,17 @@ const postSlice = createSlice({
       }
     },
   },
+  selectors: {
+    selectAllPosts: (postsState) => postsState,
+    selectPostById: (postsState, postId: string) => {
+      return postsState.find((post) => post.id === postId);
+    },
+  },
 });
 export const { postAdded, postUpdated } = postSlice.actions;
-
+export const { selectAllPosts, selectPostById } = postSlice.selectors;
 export default postSlice.reducer;
 
-export const selectAllPosts = (state: RootState) => state.posts;
-export const selectPostById = (state: RootState, postId: string) =>
-  state.posts.find((post) => post.id === postId);
+// export const selectAllPosts = (state: RootState) => state.posts;
+// export const selectPostById = (state: RootState, postId: string) =>
+//   state.posts.find((post) => post.id === postId);
