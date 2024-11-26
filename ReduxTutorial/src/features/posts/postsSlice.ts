@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define a TS type for the data we will be using
 
@@ -17,7 +17,14 @@ const initialState: Post[] = [
 const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    // Decalre a 'case reducer"
+    postAdded(state, action: PayloadAction<Post>) {
+      // "mutate" the existing array, save to do since creaetSlice uses Ummer inside.
+      state.push(action.payload);
+    },
+  },
 });
+export const { postAdded } = postSlice.actions;
 
 export default postSlice.reducer;
