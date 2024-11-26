@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
@@ -8,8 +9,10 @@ export const Navbar = () => {
           Redux Essentials Example
         </h1>
 
-        <div className="">
-          <div className=""></div>
+        <div className=" text-white font-medium hover:underline hover:scale-110">
+          <div className="flex justify-center items-center">
+            <Link to="/">Posts</Link>
+          </div>
         </div>
       </section>
     </nav>
