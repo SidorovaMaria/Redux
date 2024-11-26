@@ -7,7 +7,7 @@ import EditPostForm from "./features/posts/EditPostForm";
 
 function App() {
   return (
-    <div className="bg-sky-900/80 ">
+    <div className="bg-sky-900/80 min-h-[100vh] ">
       <Router>
         <Navbar />
 

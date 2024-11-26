@@ -1,8 +1,9 @@
 import { useAppSelector } from "../../app/hooks";
 import { Link } from "react-router-dom";
+import { selectAllPosts } from "./postsSlice";
 const PostsList = () => {
   // Select the 'state.posts' value from the store into the component
-  const posts = useAppSelector((state) => state.posts);
+  const posts = useAppSelector(selectAllPosts);
 
   // Render Post List
   const renderPosts = posts.map((post) => (
