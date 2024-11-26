@@ -3,10 +3,11 @@ import { Navbar } from "./app/NavBar";
 import PostsList from "./features/posts/PostsList";
 import AddPostForm from "./features/posts/AddPostForm";
 import SinglePostPage from "./features/posts/SinglePostPage";
+import EditPostForm from "./features/posts/EditPostForm";
 
 function App() {
   return (
-    <div className="bg-sky-900/80 h-[100vh]">
+    <div className="bg-sky-900/80 ">
       <Router>
         <Navbar />
 
@@ -21,6 +22,7 @@ function App() {
             }
           ></Route>
           <Route path="/posts/:postId" element={<SinglePostPage />} />
+          <Route path="/editPost/:postId" element={<EditPostForm />} />
         </Routes>
       </Router>
     </div>

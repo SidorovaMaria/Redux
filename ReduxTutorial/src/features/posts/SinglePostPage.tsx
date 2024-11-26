@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 
 const SinglePostPage = () => {
@@ -9,19 +9,31 @@ const SinglePostPage = () => {
   //   If do not the post of that id!
   if (!post) {
     return (
-      <section>
-        <h2>We don not have such post! 😔</h2>
+      <section className="flex flex-col justify-center items-center h-[70vh]">
+        <h2 className=" text-white text-center font-bold text-3xl">
+          We don not have such post! <br></br>
+        </h2>
+        <p className="text-[5rem]">😔</p>
       </section>
     );
   }
   return (
     <section>
+      <button className=" box-border fixed top-10 left-10 text-xl text-white bg-white/20 px-4 py-2 rounded-xl hover:bg-white/90 hover:text-cyan-950 active:font-bold">
+        <Link to={"/"}>&lt; Back to All Posts</Link>
+      </button>
       <article
-        className=" py-3 px-5  text-center bg-cyan-900/80 text-white"
+        className=" py-10 px-10  text-center bg-cyan-900/80 text-white relative"
         key={post.id}
       >
         <h3 className="font-bold text-3xl">{post.title}</h3>
         <p className="my-4 italic text-xl">{post.content.substring(0, 100)}</p>
+        <Link
+          to={`/editPost/${post.id}`}
+          className="mt-4 absolute left-10 top-0 bg-cyan-950 px-4 py-2 rounded-xl text-xl hover:bg-transparent border-4 border-transparent hover:border-white active:bg-white/60"
+        >
+          Edit Post
+        </Link>
       </article>
     </section>
   );
