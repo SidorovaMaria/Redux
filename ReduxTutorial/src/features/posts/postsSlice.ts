@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+// import { RootState } from "../../app/store";
 import { nanoid } from "nanoid";
 
 // Define a TS type for the data we will be using
@@ -8,12 +8,14 @@ export interface Post {
   id: string;
   title: string;
   content: string;
+  user: string;
 }
+type PostUpate = Pick<Post, "id" | "title" | "content">;
 
 // Create an iniail state vlaue for the reducer, with that type
 const initialState: Post[] = [
-  { id: "1", title: "First Post!", content: "Hello!" },
-  { id: "2", title: "Second Post", content: "More text" },
+  { id: "1", title: "First Post!", content: "Hello!", user: "0" },
+  { id: "2", title: "Second Post", content: "More text", user: "2" },
 ];
 
 const postSlice = createSlice({
@@ -29,13 +31,13 @@ const postSlice = createSlice({
       reducer(state, action: PayloadAction<Post>) {
         state.push(action.payload);
       },
-      prepare(title: string, content: string) {
+      prepare(title: string, content: string, userId: string) {
         return {
-          payload: { id: nanoid(), title, content },
+          payload: { id: nanoid(), title, content, user: userId },
         };
       },
     },
-    postUpdated(state, action: PayloadAction<Post>) {
+    postUpdated(state, action: PayloadAction<PostUpate>) {
       const { id, title, content } = action.payload;
       const existingPost = state.find((post) => post.id === id);
       if (existingPost) {
