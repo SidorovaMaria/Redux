@@ -17,7 +17,7 @@ import LoginError from "./features/auth/LoginError";
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const username = useAppSelector(selectCurrentUsername);
   if (!username) {
-    return <Navigate to="/loginError" replace />;
+    return <Navigate to="/" replace />;
   }
   return children;
 };
@@ -28,7 +28,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/loginError" element={<LoginError />} />
+          {/* <Route path="/loginError" element={<LoginError />} /> */}
 
           {/* Protected Route  */}
           <Route
