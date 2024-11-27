@@ -8,7 +8,10 @@ const PostsList = () => {
   const posts = useAppSelector(selectAllPosts);
 
   // Render Post List
-  const renderPosts = posts.map((post) => (
+  const orderedPosts = posts
+    .slice()
+    .sort((a, b) => b.date.localeCompare(a.date));
+  const renderPosts = orderedPosts.map((post) => (
     <Link to={`/posts/${post.id}`}>
       <article
         className=" border-2 border-black mt-5 py-3 px-5 rounded-xl max-w-[600px] mx-auto bg-cyan-900/80 text-white relative"
