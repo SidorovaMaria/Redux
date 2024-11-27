@@ -1,6 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectPostById } from "./postsSlice";
+import PostAuthor from "./PostAuthor";
+import TimeAgo from "../../components/TimeAgo";
 
 const SinglePostPage = () => {
   const { postId } = useParams();
@@ -26,6 +28,10 @@ const SinglePostPage = () => {
         key={post.id}
       >
         <h3 className="font-bold text-3xl">{post.title}</h3>
+        <div className="flex items-center justify-center text-amber-300 font-bold italic">
+          <PostAuthor userId={post.user} breakWords={false} />
+          <TimeAgo timestamp={post.date} />
+        </div>
         <p className="my-4 italic text-xl">{post.content.substring(0, 100)}</p>
         <Link
           to={`/editPost/${post.id}`}

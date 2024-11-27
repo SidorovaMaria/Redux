@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { RootState } from "../../app/store";
 import { nanoid } from "nanoid";
+import { sub } from "date-fns";
 
 // Define a TS type for the data we will be using
 
@@ -9,13 +10,26 @@ export interface Post {
   title: string;
   content: string;
   user: string;
+  date: string;
 }
 type PostUpate = Pick<Post, "id" | "title" | "content">;
 
 // Create an iniail state vlaue for the reducer, with that type
 const initialState: Post[] = [
-  { id: "1", title: "First Post!", content: "Hello!", user: "0" },
-  { id: "2", title: "Second Post", content: "More text", user: "2" },
+  {
+    id: "1",
+    title: "First Post!",
+    content: "Hello!",
+    user: "0",
+    date: sub(new Date(), { minutes: 10 }).toISOString(),
+  },
+  {
+    id: "2",
+    title: "Second Post",
+    content: "More text",
+    user: "2",
+    date: sub(new Date(), { minutes: 5 }).toISOString(),
+  },
 ];
 
 const postSlice = createSlice({
@@ -33,7 +47,13 @@ const postSlice = createSlice({
       },
       prepare(title: string, content: string, userId: string) {
         return {
-          payload: { id: nanoid(), title, content, user: userId },
+          payload: {
+            id: nanoid(),
+            title,
+            content,
+            user: userId,
+            date: new Date().toISOString(),
+          },
         };
       },
     },
