@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { RootState } from "../../app/store";
 import { nanoid } from "nanoid";
 import { sub } from "date-fns";
-
+import { userLoggedOut } from "../auth/authSlice";
 export interface Reactions {
   thumbsUp: number;
   tada: number;
@@ -94,6 +94,13 @@ const postSlice = createSlice({
         existingPost.reactions[reaction]++;
       }
     },
+  },
+  extraReducers: (builder) => {
+    // Pass the action creator to `builder.addCase()`
+    builder.addCase(userLoggedOut, (state) => {
+      // Clear out the list of posts whenever the user logs out
+      return [];
+    });
   },
   selectors: {
     selectAllPosts: (postsState) => postsState,
