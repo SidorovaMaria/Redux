@@ -46,13 +46,13 @@ const EditPostForm = () => {
       >
         {/* Title */}
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" required />
+        <input type="text" id="postTitle" defaultValue={post.title} required />
         {/* Content */}
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
           name="postContent"
-          defaultValue=""
+          defaultValue={post.content}
           required
           className="font-normal"
         />

@@ -3,6 +3,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { type Post, postAdded } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
+import { selectCurrentUsername } from "../auth/authSlice";
 
 // Types of the input fields
 interface AddPostFormFields extends HTMLFormControlsCollection {
@@ -17,6 +18,7 @@ interface AddPostFormElements extends HTMLFormElement {
 const AddPostForm = () => {
   // get the 'dispatch' method
   const dispatch = useAppDispatch();
+  const userId = useAppSelector(selectCurrentUsername);
   const users = useAppSelector(selectAllUsers);
 
   const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
@@ -26,18 +28,17 @@ const AddPostForm = () => {
     const { elements } = e.currentTarget;
     const title = elements.postTitle.value;
     const content = elements.postContent.value;
-    const userId = elements.postAuthor.value;
+    // const userId = elements.postAuthor.value;
 
-    dispatch(postAdded(title, content, userId));
-
+    dispatch(postAdded(title, content, String(userId)));
     e.currentTarget.reset();
   };
 
-  const usersOptions = users.map((user) => (
-    <option key={user.id} value={user.id}>
-      {user.name}
-    </option>
-  ));
+  // const usersOptions = users.map((user) => (
+  //   <option key={user.id} value={user.id}>
+  //     {user.name}
+  //   </option>
+  // ));
 
   return (
     <section className=" w-full py-4 px-10 text-white  ">
@@ -50,11 +51,11 @@ const AddPostForm = () => {
         <label htmlFor="postTitle">Post Title:</label>
         <input type="text" id="postTitle" defaultValue="" required />
         {/* Author */}
-        <label htmlFor="postAuthor">Author:</label>
+        {/* <label htmlFor="postAuthor">Author:</label>
         <select id="postAuthor" name="postAuthor" required>
           <option value=""></option>
           {usersOptions}
-        </select>
+        </select> */}
         {/* Content */}
         <label htmlFor="postContent">Content:</label>
         <textarea
