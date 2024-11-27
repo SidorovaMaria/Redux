@@ -3,6 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectPostById } from "./postsSlice";
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "../../components/TimeAgo";
+import { ReactionButtons } from "./ReactionsButtons";
 
 const SinglePostPage = () => {
   const { postId } = useParams();
@@ -39,6 +40,7 @@ const SinglePostPage = () => {
         >
           Edit Post
         </Link>
+        <ReactionButtons post={post} />
       </article>
     </section>
   );

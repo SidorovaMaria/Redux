@@ -3,17 +3,33 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 import { sub } from "date-fns";
 
-// Define a TS type for the data we will be using
+export interface Reactions {
+  thumbsUp: number;
+  tada: number;
+  heart: number;
+  rocket: number;
+  eyes: number;
+}
+export type ReactionName = keyof Reactions;
 
+// Define a TS type for the data we will be using
 export interface Post {
   id: string;
   title: string;
   content: string;
   user: string;
   date: string;
+  reactions: Reactions;
 }
 type PostUpate = Pick<Post, "id" | "title" | "content">;
 
+const initialReactions: Reactions = {
+  thumbsUp: 0,
+  tada: 0,
+  heart: 0,
+  rocket: 0,
+  eyes: 0,
+};
 // Create an iniail state vlaue for the reducer, with that type
 const initialState: Post[] = [
   {
@@ -22,6 +38,7 @@ const initialState: Post[] = [
     content: "Hello!",
     user: "0",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
+    reactions: initialReactions,
   },
   {
     id: "2",
@@ -29,6 +46,7 @@ const initialState: Post[] = [
     content: "More text",
     user: "2",
     date: sub(new Date(), { minutes: 5 }).toISOString(),
+    reactions: initialReactions,
   },
 ];
 
@@ -53,6 +71,7 @@ const postSlice = createSlice({
             content,
             user: userId,
             date: new Date().toISOString(),
+            reactions: initialReactions,
           },
         };
       },
@@ -65,6 +84,16 @@ const postSlice = createSlice({
         existingPost.content = content;
       }
     },
+    reactionAdded(
+      state,
+      action: PayloadAction<{ postId: string; reaction: ReactionName }>
+    ) {
+      const { postId, reaction } = action.payload;
+      const existingPost = state.find((post) => post.id === postId);
+      if (existingPost) {
+        existingPost.reactions[reaction]++;
+      }
+    },
   },
   selectors: {
     selectAllPosts: (postsState) => postsState,
@@ -73,7 +102,7 @@ const postSlice = createSlice({
     },
   },
 });
-export const { postAdded, postUpdated } = postSlice.actions;
+export const { postAdded, postUpdated, reactionAdded } = postSlice.actions;
 export const { selectAllPosts, selectPostById } = postSlice.selectors;
 export default postSlice.reducer;
 
