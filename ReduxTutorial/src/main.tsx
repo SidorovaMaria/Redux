@@ -4,11 +4,21 @@ import "./index.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
+import { worker } from "./api/server";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>
-);
+async function start() {
+  // Start our mock API server
+  await worker.start({ onUnhandledRequest: "bypass" });
+
+  const root = createRoot(document.getElementById("root")!);
+
+  root.render(
+    <StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </StrictMode>
+  );
+}
+
+start();

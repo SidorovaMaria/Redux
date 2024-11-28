@@ -1,8 +1,11 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { RootState } from "../../app/store";
-import { nanoid } from "nanoid";
-import { sub } from "date-fns";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { client } from "../../api/client";
+
+import type { RootState } from "../../app/store";
+import { createAppAsyncThunk } from "../../app/withTypes";
+
 import { userLoggedOut } from "../auth/authSlice";
+
 export interface Reactions {
   thumbsUp: number;
   tada: number;
@@ -10,9 +13,9 @@ export interface Reactions {
   rocket: number;
   eyes: number;
 }
+
 export type ReactionName = keyof Reactions;
 
-// Define a TS type for the data we will be using
 export interface Post {
   id: string;
   title: string;
@@ -21,7 +24,14 @@ export interface Post {
   date: string;
   reactions: Reactions;
 }
-type PostUpate = Pick<Post, "id" | "title" | "content">;
+
+type PostUpdate = Pick<Post, "id" | "title" | "content">;
+
+interface PostsState {
+  posts: Post[];
+  status: "idle" | "pending" | "succeeded" | "rejected";
+  error: string | null;
+}
 
 const initialReactions: Reactions = {
   thumbsUp: 0,
@@ -30,55 +40,42 @@ const initialReactions: Reactions = {
   rocket: 0,
   eyes: 0,
 };
-// Create an iniail state vlaue for the reducer, with that type
-const initialState: Post[] = [
-  {
-    id: "1",
-    title: "First Post!",
-    content: "Hello!",
-    user: "0",
-    date: sub(new Date(), { minutes: 10 }).toISOString(),
-    reactions: initialReactions,
-  },
-  {
-    id: "2",
-    title: "Second Post",
-    content: "More text",
-    user: "2",
-    date: sub(new Date(), { minutes: 5 }).toISOString(),
-    reactions: initialReactions,
-  },
-];
 
-const postSlice = createSlice({
+export const fetchPosts = createAppAsyncThunk("posts/fetchPosts", async () => {
+  const response = await client.get<Post[]>("/fakeApi/posts");
+  return response.data;
+});
+
+const initialState: PostsState = {
+  posts: [],
+  status: "idle",
+  error: null,
+};
+
+const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    // Decalre a 'case reducer"
-    // postAdded(state, action: PayloadAction<Post>) {
-    //   // "mutate" the existing array, save to do since creaetSlice uses Ummer inside.
-    //   state.push(action.payload);
-    // },
     postAdded: {
       reducer(state, action: PayloadAction<Post>) {
-        state.push(action.payload);
+        state.posts.push(action.payload);
       },
       prepare(title: string, content: string, userId: string) {
         return {
           payload: {
             id: nanoid(),
+            date: new Date().toISOString(),
             title,
             content,
             user: userId,
-            date: new Date().toISOString(),
             reactions: initialReactions,
           },
         };
       },
     },
-    postUpdated(state, action: PayloadAction<PostUpate>) {
+    postUpdated(state, action: PayloadAction<PostUpdate>) {
       const { id, title, content } = action.payload;
-      const existingPost = state.find((post) => post.id === id);
+      const existingPost = state.posts.find((post) => post.id === id);
       if (existingPost) {
         existingPost.title = title;
         existingPost.content = content;
@@ -89,30 +86,41 @@ const postSlice = createSlice({
       action: PayloadAction<{ postId: string; reaction: ReactionName }>
     ) {
       const { postId, reaction } = action.payload;
-      const existingPost = state.find((post) => post.id === postId);
+      const existingPost = state.posts.find((post) => post.id === postId);
       if (existingPost) {
         existingPost.reactions[reaction]++;
       }
     },
   },
   extraReducers: (builder) => {
-    // Pass the action creator to `builder.addCase()`
-    builder.addCase(userLoggedOut, (state) => {
-      // Clear out the list of posts whenever the user logs out
-      return [];
-    });
-  },
-  selectors: {
-    selectAllPosts: (postsState) => postsState,
-    selectPostById: (postsState, postId: string) => {
-      return postsState.find((post) => post.id === postId);
-    },
+    builder
+      .addCase(userLoggedOut, (state) => {
+        // Clear out the list of posts whenever the user logs out
+        return initialState;
+      })
+      .addCase(fetchPosts.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Add any fetched posts to the array
+        state.posts.push(...action.payload);
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.error.message ?? "Unknown Error";
+      });
   },
 });
-export const { postAdded, postUpdated, reactionAdded } = postSlice.actions;
-export const { selectAllPosts, selectPostById } = postSlice.selectors;
-export default postSlice.reducer;
 
-// export const selectAllPosts = (state: RootState) => state.posts;
-// export const selectPostById = (state: RootState, postId: string) =>
-//   state.posts.find((post) => post.id === postId);
+export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions;
+
+export default postsSlice.reducer;
+
+export const selectAllPosts = (state: RootState) => state.posts.posts;
+
+export const selectPostById = (state: RootState, postId: string) =>
+  state.posts.posts.find((post) => post.id === postId);
+
+export const selectPostsStatus = (state: RootState) => state.posts.status;
+export const selectPostsError = (state: RootState) => state.posts.error;
