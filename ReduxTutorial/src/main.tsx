@@ -5,10 +5,12 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store.ts";
 import { worker } from "./api/server";
+import { fetchUsers } from "./features/users/usersSlice.ts";
 
 async function start() {
   // Start our mock API server
   await worker.start({ onUnhandledRequest: "bypass" });
+  store.dispatch(fetchUsers());
 
   const root = createRoot(document.getElementById("root")!);
 
