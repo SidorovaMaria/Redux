@@ -34,7 +34,7 @@ const AddPostForm = () => {
     const form = e.currentTarget;
     try {
       setAddRequestStatus("pending");
-      await dispatch(addNewPost({ title, content, user: userId })).unwrap();
+      await dispatch(addNewPost({ title, content, user: userId! })).unwrap();
       form.reset();
     } catch (err) {
       console.log("Failed to save the ppst: ", err);
