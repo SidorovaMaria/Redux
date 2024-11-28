@@ -15,8 +15,9 @@ export const Navbar = () => {
     navContent = (
       <div>
         <div className=" text-white font-medium hover:underline hover:scale-110">
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center gap-10">
             <Link to="/posts">Posts</Link>
+            <Link to="/users">Users</Link>
           </div>
         </div>
         <div className="text-white flex flex-col absolute top-4 right-10 gap-4">

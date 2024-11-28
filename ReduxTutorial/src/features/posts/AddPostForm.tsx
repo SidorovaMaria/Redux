@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addNewPost } from "./postsSlice";
-import { selectAllUsers } from "../users/usersSlice";
+
 import { selectCurrentUsername } from "../auth/authSlice";
 
 // Types of the input fields
@@ -22,7 +22,6 @@ const AddPostForm = () => {
   // get the 'dispatch' method
   const dispatch = useAppDispatch();
   const userId = useAppSelector(selectCurrentUsername);
-  // const users = useAppSelector(selectAllUsers);
 
   const handleSubmit = async (e: React.FormEvent<AddPostFormElements>) => {
     // Prevent server submission

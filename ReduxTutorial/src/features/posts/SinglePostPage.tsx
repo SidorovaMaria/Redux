@@ -24,9 +24,9 @@ const SinglePostPage = () => {
   const canEdit = currentUsername === post.user;
   return (
     <section>
-      <button className=" box-border fixed top-10 left-10 text-xl text-white bg-white/20 px-4 py-2 rounded-xl hover:bg-white/90 hover:text-cyan-950 active:font-bold">
+      {/* <button className=" box-border fixed top-10 left-10 text-xl text-white bg-white/20 px-4 py-2 rounded-xl hover:bg-white/90 hover:text-cyan-950 active:font-bold">
         <Link to={"/posts"}>&lt; Back to All Posts</Link>
-      </button>
+      </button> */}
       <article
         className=" py-10 px-10  text-center bg-cyan-900/80 text-white relative"
         key={post.id}

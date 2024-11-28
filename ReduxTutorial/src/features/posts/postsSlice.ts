@@ -150,3 +150,7 @@ export const selectPostById = (state: RootState, postId: string) =>
 
 export const selectPostsStatus = (state: RootState) => state.posts.status;
 export const selectPostsError = (state: RootState) => state.posts.error;
+export const selectPostByUser = (state: RootState, userId: string) => {
+  const AllPosts = selectAllPosts(state);
+  return AllPosts.filter((post) => post.user === userId);
+};
