@@ -57,32 +57,20 @@ label {
   width: 3em;
   height: 3em;
   border-radius: 50%;
-  background: DarkSlateGray;
-  background: -moz-linear-gradient(
-    left,
-    DarkSlateGray 10%,
-    rgba(128, 0, 255, 0) 42%
-  );
+  background: #436e8c;
+  background: -moz-linear-gradient(left, white 10%, rgba(128, 0, 255, 0) 42%);
   background: -webkit-linear-gradient(
     left,
-    DarkSlateGray 10%,
+    white 10%,
     rgba(128, 0, 255, 0) 42%
   );
   background: -o-linear-gradient(
     left,
-    DarkSlateGray 10%,
+    white DarkSlateGray 10%,
     rgba(128, 0, 255, 0) 42%
   );
-  background: -ms-linear-gradient(
-    left,
-    DarkSlateGray 10%,
-    rgba(128, 0, 255, 0) 42%
-  );
-  background: linear-gradient(
-    to right,
-    DarkSlateGray 10%,
-    rgba(128, 0, 255, 0) 42%
-  );
+  background: -ms-linear-gradient(left, white 10%, rgba(128, 0, 255, 0) 42%);
+  background: linear-gradient(to right, white 10%, rgba(128, 0, 255, 0) 42%);
   position: relative;
   -webkit-animation: load3 1.4s infinite linear;
   animation: load3 1.4s infinite linear;
@@ -94,7 +82,7 @@ label {
 .loader:before {
   width: 50%;
   height: 50%;
-  background: DarkSlateGray;
+  background: white;
   border-radius: 100% 0 0 0;
   position: absolute;
   top: 0;
@@ -103,7 +91,7 @@ label {
 }
 
 .loader:after {
-  background: white;
+  background: #436e8c;
   width: 45%;
   height: 45%;
   border-radius: 50%;
