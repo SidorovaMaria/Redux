@@ -26,6 +26,7 @@ export interface Post {
 }
 
 type PostUpdate = Pick<Post, "id" | "title" | "content">;
+type newPost = Pick<Post, "title" | "content" | "user">;
 
 interface PostsState {
   posts: Post[];
@@ -57,6 +58,16 @@ export const fetchPosts = createAppAsyncThunk(
     },
   }
 );
+// ADD POST TO THE API
+export const addNewPost = createAppAsyncThunk(
+  "posts/addNewPost",
+  async (initialPost: newPost) => {
+    // We send the initial data to the fake API server
+    const response = await client.post<Post>("/fakeApi/posts", initialPost);
+    // The response includes the complete post object, including unique ID
+    return response.data;
+  }
+);
 
 const initialState: PostsState = {
   posts: [],
@@ -68,23 +79,23 @@ const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    postAdded: {
-      reducer(state, action: PayloadAction<Post>) {
-        state.posts.push(action.payload);
-      },
-      prepare(title: string, content: string, userId: string) {
-        return {
-          payload: {
-            id: nanoid(),
-            date: new Date().toISOString(),
-            title,
-            content,
-            user: userId,
-            reactions: initialReactions,
-          },
-        };
-      },
-    },
+    // postAdded: {
+    //   reducer(state, action: PayloadAction<Post>) {
+    //     state.posts.push(action.payload);
+    //   },
+    //   prepare(title: string, content: string, userId: string) {
+    //     return {
+    //       payload: {
+    //         id: nanoid(),
+    //         date: new Date().toISOString(),
+    //         title,
+    //         content,
+    //         user: userId,
+    //         reactions: initialReactions,
+    //       },
+    //     };
+    //   },
+    // },
     postUpdated(state, action: PayloadAction<PostUpdate>) {
       const { id, title, content } = action.payload;
       const existingPost = state.posts.find((post) => post.id === id);
@@ -121,11 +132,14 @@ const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.error.message ?? "Unknown Error";
+      })
+      .addCase(addNewPost.fulfilled, (state, action) => {
+        state.posts.push(action.payload);
       });
   },
 });
 
-export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions;
+export const { postUpdated, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
 

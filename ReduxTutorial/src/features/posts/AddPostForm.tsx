@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { type Post, postAdded } from "./postsSlice";
+import { addNewPost } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
 import { selectCurrentUsername } from "../auth/authSlice";
 
@@ -16,12 +16,15 @@ interface AddPostFormElements extends HTMLFormElement {
 }
 
 const AddPostForm = () => {
+  const [addRequestStatus, setAddRequestStatus] = useState<"idle" | "pending">(
+    "idle"
+  );
   // get the 'dispatch' method
   const dispatch = useAppDispatch();
   const userId = useAppSelector(selectCurrentUsername);
-  const users = useAppSelector(selectAllUsers);
+  // const users = useAppSelector(selectAllUsers);
 
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = async (e: React.FormEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault();
 
@@ -29,9 +32,19 @@ const AddPostForm = () => {
     const title = elements.postTitle.value;
     const content = elements.postContent.value;
     // const userId = elements.postAuthor.value;
+    const form = e.currentTarget;
+    try {
+      setAddRequestStatus("pending");
+      await dispatch(addNewPost({ title, content, user: userId })).unwrap();
+      form.reset();
+    } catch (err) {
+      console.log("Failed to save the ppst: ", err);
+    } finally {
+      setAddRequestStatus("idle");
+    }
 
-    dispatch(postAdded(title, content, String(userId)));
-    e.currentTarget.reset();
+    // dispatch(postAdded(title, content, String(userId)));
+    // e.currentTarget.reset();
   };
 
   // const usersOptions = users.map((user) => (
