@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Possible Color Pallete: 1
+ */
+
+/* :root {
+  --text: #fcfdfd;
+  --background: #354642;
+  --accent1: #90c19e;
+  --accent-1-dark: #35597e;
+  --accent2: #228c73;
+  --accent3: #d9be63;
+}
+
+
+/* Sample Pallete 2 */
+
+:root {
+  --text: #010204;
+  --background: #f3f6fc;
+  --accent1: #244f94;
+  --accent2: #dee8f7;
+  --accent3: #16305a;
+}
+body {
+  color: var(--text);
+}
